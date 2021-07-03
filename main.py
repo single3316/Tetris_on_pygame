@@ -2,7 +2,7 @@ import pygame as pg
 
 pg.init()
 
-display_width = 600
+display_width = 650
 display_height = 900
 
 display = pg.display.set_mode((display_width, display_height))
@@ -19,20 +19,21 @@ def quit_game():
 def coord_system():
     color_line = (0, 0, 0)
     top_line = pg.draw.aaline(display, color_line,
-                              [0, 10],
-                              [800, 10])
+                              [10, 10],
+                              [410, 10])
     bot_line = pg.draw.aaline(display, color_line,
-                              [0, 890],
-                              [800, 890])
+                              [10, 890],
+                              [410, 890])
 
-    for i in range(40, 440, 40):
+    for i in range(10, 450, 40):
         line = pg.draw.line(display, color_line, [i, 10], [i, 890], 1)
     for j in range(50, 890, 40):
-        line = pg.draw.line(display, color_line, [0, j], [420, j], 1)
+        line = pg.draw.line(display, color_line, [10, j], [410, j], 1)
 
 
 def run_game():
     game = True
+    score = 0
 
     while game:
         for event in pg.event.get():
