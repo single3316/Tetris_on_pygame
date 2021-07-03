@@ -59,7 +59,6 @@ def run_game():
         display.blit(text_2, (420, 143))
         pg.display.update()
 
-        # Установка фона окна
         display.fill((22, 7, 115))
         coord_system()
 
