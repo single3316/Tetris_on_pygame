@@ -6,7 +6,7 @@ display_width = 650
 display_height = 900
 
 display = pg.display.set_mode((display_width, display_height))
-pg.display.set_caption('Tetris')
+pg.display.set_caption('Tetrows')
 
 icon = pg.image.load('icon.ico')
 
