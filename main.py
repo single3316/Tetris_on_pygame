@@ -1,12 +1,13 @@
 import pygame as pg
 
 pg.init()
-
 display_width = 650
 display_height = 900
 
 display = pg.display.set_mode((display_width, display_height))
-pg.display.set_caption('Tetris')
+pg.display.set_caption('Tetrows')
+
+button_sound = pg.mixer.Sound('button.wav')
 
 icon = pg.image.load('icon.ico')
 
@@ -16,7 +17,38 @@ def quit_game():
     quit()
 
 
-def coord_system():
+class Button:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def draw_button(self, x, y, message, action=None):
+        color_line = (255, 255, 255)
+        mouse = pg.mouse.get_pos()
+        click = pg.mouse.get_pressed()
+        pg.draw.rect(display, (222, 120, 31), (x, y, self.width, self.height))
+        if x < mouse[0] < x + self.width:
+            if y < mouse[1] < y + self.height:
+                pg.draw.line(display,color_line,
+                             [425, 815],
+                             [634, 815], 10)
+                pg.draw.line(display, color_line,
+                             [425, 883],
+                             [634, 883], 10)
+                pg.draw.line(display, color_line,
+                             [420, 811],
+                             [420, 888], 10)
+                pg.draw.line(display, color_line,
+                             [638, 811],
+                             [638, 888], 10)
+        if click[0] == 1 and action is not None:
+            pg.mixer.Sound.play(button_sound)
+            pg.time.delay(300)
+            action()
+        wrote_text(message, x + 60, y + 17, 30)
+
+
+def draw_grid():
     color_line = (255, 255, 255)
     top_line = pg.draw.aaline(display, color_line,
                               [10, 10],
@@ -36,7 +68,6 @@ def coord_system():
     line_dont_know_2 = pg.draw.line(display, color_line,
                                     [410, 610],
                                     [650, 610], 3)
-
     for i in range(10, 450, 40):
         line = pg.draw.line(display, color_line, [i, 10], [i, 890], 1)
     for j in range(50, 890, 40):
@@ -46,22 +77,29 @@ def coord_system():
 def run_game():
     game = True
     score = 0
-    font_type_1 = pg.font.Font('Baron Neue.otf', 25)
-    white = (255, 255, 255)
-    text_1 = font_type_1.render('tetrows', True, white)
-    font_type_2 = pg.font.Font('Baron Neue.otf', 20)
-    text_2 = font_type_2.render('score: 0', True, white)
+
+    button_pause = Button(210, 60)
+    button_menu = Button(210, 60)
+
     while game:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 quit_game()
-        display.blit(text_1, (475, 40))
-        display.blit(text_2, (420, 143))
+        wrote_text('tetrows', 475, 40, 25)
+        wrote_text('score: ' + str(score), 420, 143, 20)
+        button_pause.draw_button(425, 820, 'pause')
+        button_menu.draw_button(425, 700, 'menu')
+
         pg.display.update()
 
-        # Установка фона окна
         display.fill((22, 7, 115))
-        coord_system()
+        draw_grid()
+
+
+def wrote_text(message, x, y, font_size, font_type='Baron Neue.otf', font_color=(255, 255, 255), ):
+    font_type = pg.font.Font(font_type, font_size)
+    text = font_type.render(message, True, font_color)
+    display.blit(text, (x, y))
 
 
 run_game()
